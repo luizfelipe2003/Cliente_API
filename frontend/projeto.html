@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Front Cliente - Aula Spring Boot AWS</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f172a, #1e293b, #2563eb);
+      color: #0f172a;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px 16px;
+    }
+
+    .hero {
+      color: white;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+      margin-bottom: 22px;
+    }
+
+    .card h2 {
+      margin-bottom: 16px;
+      color: #1e293b;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-weight: bold;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 14px;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      opacity: 0.95;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+    }
+
+    .btn-success {
+      background: #16a34a;
+      color: white;
+    }
+
+    .btn-warning {
+      background: #f59e0b;
+      color: white;
+    }
+
+    .btn-danger {
+      background: #dc2626;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #475569;
+      color: white;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .status {
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 10px;
+      display: none;
+      font-weight: bold;
+    }
+
+    .status.ok {
+      display: block;
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status.error {
+      display: block;
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .base-url-box {
+      margin-top: 14px;
+      background: #f1f5f9;
+      border: 1px dashed #94a3b8;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      color: #334155;
+      word-break: break-all;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background: #1e293b;
+      color: white;
+    }
+
+    tr:hover td {
+      background: #f8fafc;
+    }
+
+    .endpoint-box {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.7;
+      overflow-x: auto;
+    }
+
+    @media (max-width: 800px) {
+      .grid, .grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <h1>Projeto Final - Curso de Java Spring Boot + AWS</h1>
+      <p>Frontend único para testar o backend individual de cada aluno.</p>
+    </section>
+
+    <section class="card">
+      <div class="actions" style="margin-top:0;">
+        <button class="btn-primary" onclick="abrirPagina('paginaInstrucoes')">1. Instruções do Projeto</button>
+        <button class="btn-primary" onclick="abrirPagina('paginaConexao')">2. Conexão com Backend</button>
+        <button class="btn-primary" onclick="abrirPagina('paginaClientes')">3. Funcionalidades de Cliente</button>
+        <button class="btn-primary" onclick="abrirPagina('paginaResultados')">4. Resultados</button>
+      </div>
+    </section>
+
+    <main id="paginaInstrucoes" class="pagina">
+      <section class="card">
+        <h2>Projeto Final - Curso de Java Spring Boot + AWS</h2>
+
+        <p style="line-height:1.8;color:#334155;margin-bottom:20px;">
+          O objetivo deste projeto é permitir que cada aluno desenvolva individualmente um backend completo utilizando Java Spring Boot, banco de dados PostgreSQL e deploy em uma instância AWS EC2.
+        </p>
+
+        <h2>Objetivo do Projeto</h2>
+        <p style="line-height:1.8;color:#334155;margin-bottom:20px;">
+          Desenvolver uma API REST completa para gerenciamento de clientes. O frontend fornecido pelo professor será utilizado para validar se os endpoints foram implementados corretamente.
+        </p>
+
+        <h2>Tecnologias Obrigatórias</h2>
+        <ul style="padding-left:20px;line-height:2;color:#334155;">
+          <li>Java 17</li>
+          <li>Spring Boot</li>
+          <li>Spring Web</li>
+          <li>Spring Data JPA</li>
+          <li>PostgreSQL</li>
+          <li>AWS EC2</li>
+          <li>GitLab</li>
+          <li>Swagger/OpenAPI</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Entidade Obrigatória</h2>
+        <div class="endpoint-box">
+          Cliente<br />
+          --------------------------------------------------<br />
+          id               -> Long<br />
+          nome             -> String<br />
+          cpf              -> String<br />
+          email            -> String<br />
+          telefone         -> String<br />
+          sexo             -> String<br />
+          dataNascimento   -> String
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Endpoints Obrigatórios</h2>
+        <div class="endpoint-box">
+          POST&nbsp;&nbsp;&nbsp; /clientes<br />
+          GET&nbsp;&nbsp;&nbsp;&nbsp; /clientes<br />
+          GET&nbsp;&nbsp;&nbsp;&nbsp; /clientes/{id}<br />
+          GET&nbsp;&nbsp;&nbsp;&nbsp; /clientes/cpf/{cpf}<br />
+          GET&nbsp;&nbsp;&nbsp;&nbsp; /clientes/nome/{nome}<br />
+          GET&nbsp;&nbsp;&nbsp;&nbsp; /clientes/sexo/{sexo}<br />
+          PUT&nbsp;&nbsp;&nbsp;&nbsp; /clientes/{id}<br />
+          DELETE&nbsp; /clientes/{id}
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Regras do Projeto</h2>
+        <ul style="padding-left:20px;line-height:2;color:#334155;">
+          <li>Cada aluno deverá possuir sua própria instância EC2.</li>
+          <li>O backend deverá estar publicado e acessível pela internet.</li>
+          <li>O frontend fornecido deverá funcionar sem alterações.</li>
+          <li>Todos os endpoints devem retornar JSON.</li>
+          <li>Os nomes dos atributos devem seguir exatamente o padrão especificado.</li>
+          <li>O projeto deve possuir integração com PostgreSQL.</li>
+          <li>O projeto deve possuir Swagger funcionando.</li>
+          <li>O código deverá estar versionado no GitLab.</li>
+        </ul>
+      </section>
+
+
+      <section class="card">
+        <h2>Configuração obrigatória para funcionamento do Front</h2>
+        <p style="line-height:1.8;color:#334155;margin-bottom:16px;">
+          Como este frontend HTML poderá ser aberto diretamente no navegador, o backend precisa liberar chamadas externas no controller.
+          Para isso, inclua a anotação abaixo na controller de clientes.
+        </p>
+
+        <div class="endpoint-box">
+          @CrossOrigin(origins = "*")
+        </div>
+
+        <p style="line-height:1.8;color:#334155;margin-top:20px;margin-bottom:16px;">
+          Exemplo completo:
+        </p>
+
+        <div class="endpoint-box">
+          @CrossOrigin(origins = "*")<br />
+          @RestController<br />
+          @RequestMapping("/clientes")<br />
+          @RequiredArgsConstructor<br /><br />
+          public class ClienteController {<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;// endpoints do projeto<br />
+          }
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Critérios de Avaliação</h2>
+        <ul style="padding-left:20px;line-height:2;color:#334155;">
+          <li>Funcionamento completo da API.</li>
+          <li>Deploy funcionando na AWS.</li>
+          <li>Integração correta com o frontend.</li>
+          <li>Organização do código.</li>
+          <li>Padronização da arquitetura Controller, Service, Repository e Model.</li>
+          <li>Persistência correta dos dados.</li>
+          <li>Versionamento no GitLab.</li>
+        </ul>
+      </section>
+    </main>
+
+    <main id="paginaConexao" class="pagina hidden">
+      <section id="conexaoCard" class="card">
+        <h2>Conectar ao Backend</h2>
+
+        <div class="field">
+          <label for="baseUrl">URL base do backend</label>
+          <input
+            id="baseUrl"
+            type="text"
+            placeholder="Exemplo: http://ec2-18-116-200-24.us-east-2.compute.amazonaws.com:8081"
+          />
+        </div>
+
+        <div class="actions">
+          <button class="btn-primary" onclick="conectarBackend()">Conectar</button>
+          <button class="btn-secondary" onclick="limparConexao()">Limpar conexão</button>
+        </div>
+
+        <div class="base-url-box">
+          A URL deve ser informada sem barra no final. Exemplo correto:<br />
+          <strong>http://ec2-18-116-200-24.us-east-2.compute.amazonaws.com:8081</strong>
+        </div>
+
+        <div id="statusConexao" class="status"></div>
+      </section>
+
+      <section class="card">
+        <h2>Backend conectado</h2>
+        <div class="base-url-box">
+          URL atual: <strong id="urlAtual"></strong>
+        </div>
+      </section>
+    </main>
+
+    <main id="paginaClientes" class="pagina hidden">
+      <section class="card">
+        <h2>Cadastro / Alteração de Cliente</h2>
+
+        <input type="hidden" id="clienteId" />
+
+        <div class="grid">
+          <div class="field">
+            <label for="nome">Nome</label>
+            <input id="nome" type="text" placeholder="Nome completo" />
+          </div>
+
+          <div class="field">
+            <label for="cpf">CPF</label>
+            <input id="cpf" type="text" placeholder="Somente números ou formatado" />
+          </div>
+
+          <div class="field">
+            <label for="email">E-mail</label>
+            <input id="email" type="email" placeholder="cliente@email.com" />
+          </div>
+
+          <div class="field">
+            <label for="telefone">Telefone</label>
+            <input id="telefone" type="text" placeholder="(61) 99999-9999" />
+          </div>
+
+          <div class="field">
+            <label for="sexo">Sexo</label>
+            <select id="sexo">
+              <option value="">Selecione</option>
+              <option value="MASCULINO">Masculino</option>
+              <option value="FEMININO">Feminino</option>
+              <option value="OUTRO">Outro</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="dataNascimento">Data de nascimento</label>
+            <input id="dataNascimento" type="date" />
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn-success" onclick="salvarCliente()">Salvar cliente</button>
+          <button class="btn-warning" onclick="limparFormulario()">Limpar formulário</button>
+        </div>
+
+        <div id="statusFormulario" class="status"></div>
+      </section>
+
+      <section class="card">
+        <h2>Consultas</h2>
+
+        <div class="grid-3">
+          <div class="field">
+            <label for="buscarId">Buscar por ID</label>
+            <input id="buscarId" type="number" placeholder="Ex: 1" />
+            <button class="btn-primary" onclick="buscarPorId()">Consultar ID</button>
+          </div>
+
+          <div class="field">
+            <label for="buscarCpf">Buscar por CPF</label>
+            <input id="buscarCpf" type="text" placeholder="Ex: 12345678900" />
+            <button class="btn-primary" onclick="buscarPorCpf()">Consultar CPF</button>
+          </div>
+
+          <div class="field">
+            <label for="buscarNome">Buscar por Nome</label>
+            <input id="buscarNome" type="text" placeholder="Ex: Maria" />
+            <button class="btn-primary" onclick="buscarPorNome()">Consultar Nome</button>
+          </div>
+
+          <div class="field">
+            <label for="buscarSexo">Listar por Sexo</label>
+            <select id="buscarSexo">
+              <option value="">Selecione</option>
+              <option value="MASCULINO">Masculino</option>
+              <option value="FEMININO">Feminino</option>
+              <option value="OUTRO">Outro</option>
+            </select>
+            <button class="btn-primary" onclick="buscarPorSexo()">Consultar Sexo</button>
+          </div>
+
+          <div class="field">
+            <label>Listar todos</label>
+            <input disabled value="GET /clientes" />
+            <button class="btn-secondary" onclick="listarTodos()">Listar Clientes</button>
+          </div>
+        </div>
+
+        <div id="statusConsulta" class="status"></div>
+      </section>
+    </main>
+
+    <main id="paginaResultados" class="pagina hidden">
+      <section class="card">
+        <h2>Resultado das Consultas</h2>
+        <p style="line-height:1.8;color:#334155;margin-bottom:16px;">
+          Os resultados das consultas, cadastros, alterações e exclusões aparecerão nesta página.
+        </p>
+        <div id="resultadoTabela"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    let API_BASE_URL = localStorage.getItem('API_BASE_URL') || '';
+
+    window.onload = function () {
+      if (API_BASE_URL) {
+        document.getElementById('baseUrl').value = API_BASE_URL;
+        document.getElementById('urlAtual').innerText = API_BASE_URL;
+      }
+    };
+
+    function abrirPagina(idPagina) {
+      const paginas = document.querySelectorAll('.pagina');
+      paginas.forEach(pagina => pagina.classList.add('hidden'));
+      document.getElementById(idPagina).classList.remove('hidden');
+
+      if (idPagina === 'paginaConexao') {
+        document.getElementById('urlAtual').innerText = API_BASE_URL || 'Nenhuma URL configurada';
+      }
+    }
+
+    function conectarBackend() {
+      const inputUrl = document.getElementById('baseUrl').value.trim();
+
+      if (!inputUrl) {
+        mostrarStatus('statusConexao', 'Informe a URL base do backend.', 'error');
+        return;
+      }
+
+      API_BASE_URL = removerBarraFinal(inputUrl);
+      localStorage.setItem('API_BASE_URL', API_BASE_URL);
+      document.getElementById('urlAtual').innerText = API_BASE_URL;
+
+      mostrarStatus('statusConexao', 'Backend configurado com sucesso.', 'ok');
+    }
+
+    function limparConexao() {
+      localStorage.removeItem('API_BASE_URL');
+      API_BASE_URL = '';
+      document.getElementById('baseUrl').value = '';
+      document.getElementById('urlAtual').innerText = 'Nenhuma URL configurada';
+      mostrarStatus('statusConexao', 'Conexão removida.', 'ok');
+    }
+
+    function validarConexao() {
+      if (!API_BASE_URL) {
+        abrirPagina('paginaConexao');
+        mostrarStatus('statusConexao', 'Configure primeiro a URL do backend.', 'error');
+        return false;
+      }
+      return true;
+    }
+
+    function removerBarraFinal(url) {
+      return url.endsWith('/') ? url.slice(0, -1) : url;
+    }
+
+    function montarUrl(endpoint) {
+      return API_BASE_URL + endpoint;
+    }
+
+    function obterClienteFormulario() {
+      return {
+        nome: document.getElementById('nome').value.trim(),
+        cpf: document.getElementById('cpf').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        telefone: document.getElementById('telefone').value.trim(),
+        sexo: document.getElementById('sexo').value,
+        dataNascimento: document.getElementById('dataNascimento').value
+      };
+    }
+
+    function validarCliente(cliente) {
+      if (!cliente.nome) return 'Nome é obrigatório.';
+      if (!cliente.cpf) return 'CPF é obrigatório.';
+      if (!cliente.email) return 'E-mail é obrigatório.';
+      if (!cliente.telefone) return 'Telefone é obrigatório.';
+      if (!cliente.sexo) return 'Sexo é obrigatório.';
+      if (!cliente.dataNascimento) return 'Data de nascimento é obrigatória.';
+      return null;
+    }
+
+    async function salvarCliente() {
+      if (!validarConexao()) return;
+
+      const cliente = obterClienteFormulario();
+      const erro = validarCliente(cliente);
+
+      if (erro) {
+        mostrarStatus('statusFormulario', erro, 'error');
+        return;
+      }
+
+      const id = document.getElementById('clienteId').value;
+      const editando = !!id;
+
+      const url = editando ? montarUrl('/clientes/' + id) : montarUrl('/clientes');
+      const metodo = editando ? 'PUT' : 'POST';
+
+      try {
+        const resposta = await fetch(url, {
+          method: metodo,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(cliente)
+        });
+
+        if (!resposta.ok) throw new Error('Erro HTTP: ' + resposta.status);
+
+        const dados = await resposta.json();
+        mostrarStatus('statusFormulario', editando ? 'Cliente alterado com sucesso.' : 'Cliente cadastrado com sucesso.', 'ok');
+        limparFormulario();
+        renderizarResultado(dados);
+        abrirPagina('paginaResultados');
+      } catch (erro) {
+        mostrarStatus('statusFormulario', 'Erro ao salvar cliente: ' + erro.message, 'error');
+      }
+    }
+
+    async function buscarPorId() {
+      const id = document.getElementById('buscarId').value;
+      if (!id) return mostrarStatus('statusConsulta', 'Informe o ID.', 'error');
+      await consultarEndpoint('/clientes/' + id);
+    }
+
+    async function buscarPorCpf() {
+      const cpf = document.getElementById('buscarCpf').value.trim();
+      if (!cpf) return mostrarStatus('statusConsulta', 'Informe o CPF.', 'error');
+      await consultarEndpoint('/clientes/cpf/' + encodeURIComponent(cpf));
+    }
+
+    async function buscarPorNome() {
+      const nome = document.getElementById('buscarNome').value.trim();
+      if (!nome) return mostrarStatus('statusConsulta', 'Informe o nome.', 'error');
+      await consultarEndpoint('/clientes/nome/' + encodeURIComponent(nome));
+    }
+
+    async function buscarPorSexo() {
+      const sexo = document.getElementById('buscarSexo').value;
+      if (!sexo) return mostrarStatus('statusConsulta', 'Informe o sexo.', 'error');
+      await consultarEndpoint('/clientes/sexo/' + encodeURIComponent(sexo));
+    }
+
+    async function listarTodos() {
+      await consultarEndpoint('/clientes');
+    }
+
+    async function consultarEndpoint(endpoint) {
+      if (!validarConexao()) return;
+
+      try {
+        const resposta = await fetch(montarUrl(endpoint));
+        if (!resposta.ok) throw new Error('Erro HTTP: ' + resposta.status);
+
+        const dados = await resposta.json();
+        mostrarStatus('statusConsulta', 'Consulta realizada com sucesso.', 'ok');
+        renderizarResultado(dados);
+        abrirPagina('paginaResultados');
+      } catch (erro) {
+        mostrarStatus('statusConsulta', 'Erro na consulta: ' + erro.message, 'error');
+      }
+    }
+
+    async function excluirCliente(id) {
+      if (!validarConexao()) return;
+      if (!confirm('Deseja realmente excluir o cliente ID ' + id + '?')) return;
+
+      try {
+        const resposta = await fetch(montarUrl('/clientes/' + id), { method: 'DELETE' });
+        if (!resposta.ok) throw new Error('Erro HTTP: ' + resposta.status);
+
+        mostrarStatus('statusConsulta', 'Cliente excluído com sucesso.', 'ok');
+        listarTodos();
+      } catch (erro) {
+        mostrarStatus('statusConsulta', 'Erro ao excluir cliente: ' + erro.message, 'error');
+      }
+    }
+
+    function carregarParaEdicao(cliente) {
+      document.getElementById('clienteId').value = cliente.id || '';
+      document.getElementById('nome').value = cliente.nome || '';
+      document.getElementById('cpf').value = cliente.cpf || '';
+      document.getElementById('email').value = cliente.email || '';
+      document.getElementById('telefone').value = cliente.telefone || '';
+      document.getElementById('sexo').value = cliente.sexo || '';
+      document.getElementById('dataNascimento').value = cliente.dataNascimento || '';
+
+      abrirPagina('paginaClientes');
+      mostrarStatus('statusFormulario', 'Cliente carregado para alteração.', 'ok');
+    }
+
+    function limparFormulario() {
+      document.getElementById('clienteId').value = '';
+      document.getElementById('nome').value = '';
+      document.getElementById('cpf').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('telefone').value = '';
+      document.getElementById('sexo').value = '';
+      document.getElementById('dataNascimento').value = '';
+    }
+
+    function renderizarResultado(dados) {
+      const container = document.getElementById('resultadoTabela');
+
+      if (!dados) {
+        container.innerHTML = '<p>Nenhum dado encontrado.</p>';
+        return;
+      }
+
+      const lista = Array.isArray(dados) ? dados : [dados];
+
+      if (lista.length === 0) {
+        container.innerHTML = '<p>Nenhum cliente encontrado.</p>';
+        return;
+      }
+
+      let html = `
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>CPF</th>
+              <th>E-mail</th>
+              <th>Telefone</th>
+              <th>Sexo</th>
+              <th>Nascimento</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      lista.forEach(cliente => {
+        const clienteJson = encodeURIComponent(JSON.stringify(cliente));
+        html += `
+          <tr>
+            <td>${cliente.id ?? ''}</td>
+            <td>${cliente.nome ?? ''}</td>
+            <td>${cliente.cpf ?? ''}</td>
+            <td>${cliente.email ?? ''}</td>
+            <td>${cliente.telefone ?? ''}</td>
+            <td>${cliente.sexo ?? ''}</td>
+            <td>${cliente.dataNascimento ?? ''}</td>
+            <td>
+              <button class="btn-warning" onclick="carregarClienteEncoded('${clienteJson}')">Editar</button>
+              <button class="btn-danger" onclick="excluirCliente(${cliente.id})">Excluir</button>
+            </td>
+          </tr>
+        `;
+      });
+
+      html += `</tbody></table>`;
+      container.innerHTML = html;
+    }
+
+    function carregarClienteEncoded(clienteEncoded) {
+      const cliente = JSON.parse(decodeURIComponent(clienteEncoded));
+      carregarParaEdicao(cliente);
+    }
+
+    function mostrarStatus(idElemento, mensagem, tipo) {
+      const elemento = document.getElementById(idElemento);
+      elemento.innerText = mensagem;
+      elemento.className = 'status ' + tipo;
+    }
+  </script>
+</body>
+</html>
