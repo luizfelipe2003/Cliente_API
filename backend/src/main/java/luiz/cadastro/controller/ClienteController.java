@@ -1,7 +1,6 @@
 package luiz.cadastro.controller;
 
 import luiz.cadastro.model.Cliente;
-import luiz.cadastro.repository.ClienteRepository;
 import luiz.cadastro.service.ClienteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
