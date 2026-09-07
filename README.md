@@ -41,7 +41,7 @@ PUT     /clientes/{id}
 DELETE  /clientes/{id}
 ```
 
-### O que aprendi
+### Aprendizado
 
 - Estruturar uma API REST com a arquitetura em camadas **Controller → Service → Repository → Model**
 - Integrar o Spring Boot com banco de dados relacional usando **Spring Data JPA**
