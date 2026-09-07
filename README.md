@@ -8,6 +8,8 @@
 
 ### Sobre o Projeto
 
+> API REST de clientes em Java/Spring Boot com deploy na AWS.
+
 API REST para gerenciamento de clientes, desenvolvida como projeto final de um curso de Java Spring Boot com deploy na AWS. O sistema permite cadastrar, consultar, atualizar e excluir clientes, com persistência em banco de dados PostgreSQL hospedado no Amazon RDS.
 
 ### Tecnologias Utilizadas
@@ -70,6 +72,8 @@ Acesse a documentação em: `http://localhost:8080/swagger-ui.html`
 ## English
 
 ### About
+
+> Customer REST API built with Java/Spring Boot and deployed on AWS.
 
 REST API for customer management, built as the final project of a Java Spring Boot + AWS course. It supports full CRUD operations with data persisted in a PostgreSQL database hosted on Amazon RDS.
 
