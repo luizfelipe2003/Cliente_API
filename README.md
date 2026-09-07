@@ -2,6 +2,8 @@
 
 > 🇧🇷 [Português](#português) | 🇺🇸 [English](#english)
 
+![Swagger UI](img/image.png)
+
 ---
 
 ## Português
